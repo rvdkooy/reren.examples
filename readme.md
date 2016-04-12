@@ -1,5 +1,5 @@
 # reren todo-app
-A simple todo-app which uses the [reren](https://github.com/rvdkooy/reren) viewengine
+A simple todo-app that uses the [reren](https://github.com/rvdkooy/reren) viewengine
 
 to get started type:
 
