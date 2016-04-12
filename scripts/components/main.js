@@ -16,7 +16,7 @@ var Main = R.component({
         };
 
         this.model.onRemoveTodo = (todo) => {
-            this.model.todos = this.model.todos.splice(this.model.todos.indexOf(todo), 1);
+            this.model.todos.splice(this.model.todos.indexOf(todo));
             this.update();
         };
     },
