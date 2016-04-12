@@ -1,5 +1,6 @@
 import R from 'reren';
 import todoItem from './todoItem';
+import footer from './footer';
 
 var Main = R.component({
     controller: function() {
@@ -8,7 +9,7 @@ var Main = R.component({
 
         this.model.onNewTaskKeyUp = (e) => {
             if (e.keyCode == 13 && e.target.value) {
-                this.model.todos.push(e.target.value);
+                this.model.todos.push({ index: this.model.todos.length + 1, text: e.target.value });
                 this.model.newTodoText = "";
                 e.target.value = "";
                 this.update();
@@ -16,17 +17,26 @@ var Main = R.component({
         };
 
         this.model.onRemoveTodo = (todo) => {
-            this.model.todos.splice(this.model.todos.indexOf(todo));
+            this.model.todos = this.model.todos.filter(x => x.index !== todo.index);
+            this.update();
+        };
+
+        this.model.onTodoChecked = () => {
+            // do some checking
             this.update();
         };
     },
     view: (model) => {
 
         var todoItems = model.todos.map(todo => {
-            return R.element(todoItem, { text: todo, onRemoveTodo: model.onRemoveTodo });
+            return R.element(todoItem, {
+                todo: todo,
+                onRemoveTodo: model.onRemoveTodo,
+                onTodoChecked: model.onTodoChecked
+            });
         });
 
-        return R.section({ classes: "todoapp" },
+        return R.section({ classes: "todoapp" }, [
                     R.header({ classes: "header" }, [
                         R.h1(null, "todo's app"),
                         R.input({ classes: "new-todo",
@@ -35,11 +45,11 @@ var Main = R.component({
                                     autoFocus: "true",
                                     onKeyDown: model.onNewTaskKeyUp,
                                     value: model.newTodoText
-                                }),
-                        R.section({ classes: "main" }, [
-                            R.ul({ classes: "todo-list" }, todoItems)
-                        ])
-                    ]));
+                                })
+                ]),
+                R.section({ classes: "main" }, R.ul({ classes: "todo-list" }, todoItems)),
+                R.element(footer, { todoCount: model.todos.length })
+            ]);
     }
 });
 
