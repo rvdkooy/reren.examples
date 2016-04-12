@@ -21,13 +21,12 @@ var Main = R.component({
             this.update();
         };
 
-        this.model.onTodoChecked = () => {
-            // do some checking
+        this.model.onTodoChecked = (todo) => {
+            todo.completed = !todo.completed;
             this.update();
         };
     },
     view: (model) => {
-
         var todoItems = model.todos.map(todo => {
             return R.element(todoItem, {
                 todo: todo,
@@ -48,7 +47,7 @@ var Main = R.component({
                                 })
                 ]),
                 R.section({ classes: "main" }, R.ul({ classes: "todo-list" }, todoItems)),
-                R.element(footer, { todoCount: model.todos.length })
+                R.element(footer, { todoCount: model.todos.filter(x => !x.completed).length })
             ]);
     }
 });
