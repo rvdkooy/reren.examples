@@ -4,7 +4,7 @@
   "description": "Example project for reren",
   "main": "index.js",
   "scripts": {
-    "test-server": "webpack & http-server",
+    "test-server": "webpack && http-server -o",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
