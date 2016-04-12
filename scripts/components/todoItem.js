@@ -16,7 +16,12 @@ var TodoItem = R.component({
 
         return R.li({ classes: classes },
                 R.div({ classes: "view" }, [
-                    R.input({ classes: "toggle", type: "checkbox", onClick: model.onTodoChecked }),
+                    R.input({ 
+                        classes: "toggle",
+                        type: "checkbox",
+                        onClick: model.onTodoChecked,
+                        checked: (model.todo.completed) ? 'checked' : null
+                    }),
                     R.label(null, model.todo.text),
                     R.button({ classes: "destroy", onClick: model.onRemoveTodo })
                 ]));
