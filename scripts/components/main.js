@@ -6,6 +6,7 @@ var Main = R.component({
     controller: function() {
         this.model.todos = [];
         this.model.newTodoText = "";
+        this.model.activeFilter = "all";
 
         this.model.onNewTaskKeyUp = (e) => {
             if (e.keyCode == 13 && e.target.value) {
@@ -25,9 +26,22 @@ var Main = R.component({
             todo.completed = !todo.completed;
             this.update();
         };
+
+        this.model.onFilterSelected = (filter) => {
+            this.model.activeFilter = filter;
+            this.update();
+        };
     },
     view: (model) => {
-        var todoItems = model.todos.map(todo => {
+        var filteredItems = model.todos;
+
+        if (model.activeFilter === "active") {
+            filteredItems = model.todos.filter(x => !x.completed);
+        } else if (model.activeFilter === "completed") {
+            filteredItems = model.todos.filter(x => x.completed);
+        }
+
+        var todoItems = filteredItems.map(todo => {
             return R.element(todoItem, {
                 todo: todo,
                 onRemoveTodo: model.onRemoveTodo,
@@ -37,7 +51,7 @@ var Main = R.component({
 
         return R.section({ classes: "todoapp" }, [
                     R.header({ classes: "header" }, [
-                        R.h1(null, "todo's app"),
+                        R.h1(null, "reren todo"),
                         R.input({ classes: "new-todo",
                                     type: "text",
                                     placeholder: "What needs to be done?",
@@ -47,7 +61,10 @@ var Main = R.component({
                                 })
                 ]),
                 R.section({ classes: "main" }, R.ul({ classes: "todo-list" }, todoItems)),
-                R.element(footer, { todoCount: model.todos.filter(x => !x.completed).length })
+                R.element(footer, { todoCount: model.todos.filter(x => !x.completed).length, 
+                                    onFilterSelected: model.onFilterSelected,
+                                    activeFilter: model.activeFilter
+                                })
             ]);
     }
 });
