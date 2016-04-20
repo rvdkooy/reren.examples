@@ -1,14 +1,11 @@
 import R from 'reren';
 
 var TodoItem = R.component({
-    controller: function() {
-        this.onMount = (parentModel) => {
-            this.model.todo = parentModel.todo;
-            this.model.onRemoveTodo = () => parentModel.onRemoveTodo(parentModel.todo);
-            this.model.onTodoChecked = () => parentModel.onTodoChecked(parentModel.todo);
-        };
-        this.onUpdate = (parentModel) => {
-            this.model.todo = parentModel.todo;
+    controller: function(parentModel) {
+        this.model = parentModel;
+
+        this.onUpdate = (updatedParentModel) => {
+            this.model.todo = updatedParentModel.todo;
         };
     },
     view: (model) => {
@@ -19,11 +16,11 @@ var TodoItem = R.component({
                     R.input({ 
                         classes: "toggle",
                         type: "checkbox",
-                        onClick: model.onTodoChecked,
+                        onClick: model.onTodoChecked.bind(null, model.todo),
                         checked: (model.todo.completed) ? 'checked' : null
                     }),
                     R.label(null, model.todo.text),
-                    R.button({ classes: "destroy", onClick: model.onRemoveTodo })
+                    R.button({ classes: "destroy", onClick: model.onRemoveTodo.bind(null, model.todo) })
                 ]));
     }
 });
